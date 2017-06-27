@@ -24,6 +24,8 @@ default.test_lst = default.data_list_path + 'test.lst'
 nn = ed()
 
 nn.model_dir = 'pretrained_model/'
+
+nn.resnet = ed()
 nn.resnet.pretrained_model_name = 'resnet-50'
 nn.resnet.pretrained_model_epoch = 0
 nn.resnet.url_prefix = 'http://data.mxnet.io/models/imagenet/resnet/50-layers/resnet-50'
