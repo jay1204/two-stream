@@ -12,7 +12,7 @@ def download(url, model_dir):
     if not os.path.exists(model_dir + filename):
         urllib.urlretrieve(url, model_dir + filename)
 
-def spec_context(param, ctx):
+def specContext(param, ctx):
     """
     This func specifies the device context(computation source:CPU/GPU)
     of the NDArray
@@ -29,7 +29,7 @@ def spec_context(param, ctx):
         
     return
     
-def load_pretrained_model(prefix, epoch, ctx = None):
+def loadPretrainedModel(prefix, epoch, ctx = None):
     """
     This func is a wrapper of the mx.model.load_checkpoint. It can 
     also specify the context(computation source:CPU/GPU) that will
@@ -48,8 +48,8 @@ def load_pretrained_model(prefix, epoch, ctx = None):
     sym, arg_params, aux_params = mx.model.load_checkpoint(prefix, epoch)
     logging.info('The pretrained model has been loaded successfully!')
     if ctx:
-        spec_context(arg_params, ctx)
-        spec_context(aux_params, ctx)
+        specContext(arg_params, ctx)
+        specContext(aux_params, ctx)
     return sym, arg_params, aux_params
 
 def refactorModel(symbol, arg_params, num_classes, layer_name='flatten0'):
