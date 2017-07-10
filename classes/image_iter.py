@@ -7,7 +7,7 @@ class ImageIter(mx.io.DataIter):
     it reads raw image files
         - 
     """
-    def __init__(self, batch_size, data_shape, path_imglist, ctx, shuffle=False, work_load_list = None, **kwargs):
+    def __init__(self, batch_size, data_shape, path_imglist, ctx = None, shuffle=False, work_load_list = None, **kwargs):
         super(ImageIter, self).__init__()
 
         self.batch_size = batch_size
@@ -26,7 +26,6 @@ class ImageIter(mx.io.DataIter):
         self.shuffle = shuffle
         self.img_size = len(imglist.keys())
         self.seq = np.arange(self.img_size)
-        self.resize = resize
 
         self.data_shape = data_shape
         self.ctx = ctx
