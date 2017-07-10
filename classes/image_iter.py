@@ -25,7 +25,7 @@ class ImageIter(mx.io.DataIter):
         self.imglist = imglist 
         self.shuffle = shuffle
         self.img_size = len(imglist.keys())
-        self.seq = np.arange(self.img_size)
+        self.seq = np.arange(self.img_size, dtype = np.int)
 
         self.data_shape = data_shape
         self.ctx = ctx
