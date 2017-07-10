@@ -1,5 +1,6 @@
 import numpy as np 
 import mxnet as mx 
+from mxnet.executor_manager import _split_input_slice
 
 class ImageIter(mx.io.DataIter):
     """
