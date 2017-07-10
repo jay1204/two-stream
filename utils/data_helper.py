@@ -6,8 +6,10 @@ import csv
 from ..logger import logger
 from ..config import default
 
-
 def getUCFImageLst():
+    """
+    Given the training list and testing list file, make .lsts file for them
+    """
     if not os.path.exists(default.train_lst) or os.path.exists(default.valid_lst):
         makeImageLst(inputFilePath = default.train_list, dataDir = default.data_dir, 
              labelFile = default.label_list, fileType = 'train')
