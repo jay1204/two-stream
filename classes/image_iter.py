@@ -43,7 +43,7 @@ class ImageIter(mx.io.DataIter):
     def reset(self):
         self.cur = 0
         if self.shuffle:
-            self.seq = np.random.shuffle(self.seq)
+            np.random.shuffle(self.seq)
 
 
     def iter_next(self):
