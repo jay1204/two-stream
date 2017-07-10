@@ -39,7 +39,7 @@ class ImageIter(mx.io.DataIter):
 
         self.cur = 0
         self.reset()
-        self.next()
+        #self.next()
 
     def reset(self):
         self.cur = 0
