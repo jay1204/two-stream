@@ -25,7 +25,7 @@ class ImageIter(mx.io.DataIter):
         self.imglist = imglist 
         self.shuffle = shuffle
         self.img_size = len(imglist.keys())
-        self.seq = np.arange(self.imgSize)
+        self.seq = np.arange(self.img_size)
         self.resize = resize
 
         self.data_shape = data_shape
@@ -67,7 +67,7 @@ class ImageIter(mx.io.DataIter):
 
         slices = _split_input_slice(self.batch_size, work_load_list)
 
-        for each_slice  in slices:
+        for each_slice in slices:
             imgs_list = map(lambda x: self.imglist[batch_indices[x]], range(each_slice.start, each_slice.stop))
             data, label = self.read_imgs(imgs = imgs_list, data_shape = self.data_shape, preprocess = self.preprocess)
 
