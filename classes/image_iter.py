@@ -1,7 +1,7 @@
 import numpy as np 
 import mxnet as mx 
 
-class ImageIter(io.DataIter):
+class ImageIter(mx.io.DataIter):
 	"""
 	This class is a wrapper of the basic mx.io.DataIter. 
 	it reads raw image files
