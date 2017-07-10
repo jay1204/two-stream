@@ -87,7 +87,7 @@ def extractDir(inputFilePath):
 def readLabelFile(labelFile):
     """
     read the label document and return a dict{VideoName: label}
-    The data format in the labelFile should be like:
+    The data format in the labelFile is like:
     '2 ApplyLipstick'
     """
     labelFile = open(labelFile, 'rU')
