@@ -12,7 +12,7 @@ class ImageIter(mx.io.DataIter):
 
         self.batch_size = batch_size
 
-        with open('path_imglist') as fin:
+        with open(path_imglist) as fin:
             imglist = {}
             for line in iter(fin.readline, ''):
                 line = line.strip().split('\t')
@@ -88,7 +88,7 @@ class ImageIter(mx.io.DataIter):
 
 
     def load_one_image(self, img_path):
-        with open(framePath, 'rb') as fp:
+        with open(img_path, 'rb') as fp:
             imageInfo = fp.read()
 
         return mx.img.imdecode(imageInfo)
