@@ -47,7 +47,7 @@ class ImageIter(mx.io.DataIter):
             self.seq = np.random.shuffle(self.seq)
 
 
-    def iter_next(self)：
+    def iter_next(self):
         return self.cur + self.batch_size <= self.img_size
 
     def next(self):
