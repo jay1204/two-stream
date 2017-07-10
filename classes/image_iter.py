@@ -7,7 +7,7 @@ class ImageIter(mx.io.DataIter):
     it reads raw image files
         - 
     """
-    def __init__(self, batch_size, data_shape, path_imglist, path_root, ctx, shuffle=False, work_load_list = None, **kwargs):
+    def __init__(self, batch_size, data_shape, path_imglist, ctx, shuffle=False, work_load_list = None, **kwargs):
         super(ImageIter, self).__init__()
 
         self.batch_size = batch_size
