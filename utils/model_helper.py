@@ -30,7 +30,7 @@ def specContext(param, ctx):
         
     return
     
-def loadPretrainedModel(prefix, epoch, model_dir, ctx = None):
+def loadPretrainedModel(model_name, epoch, model_dir, ctx = None):
     """
     This func is a wrapper of the mx.model.load_checkpoint. It can 
     also specify the context(computation source:CPU/GPU) that will
@@ -46,7 +46,7 @@ def loadPretrainedModel(prefix, epoch, model_dir, ctx = None):
         - aux_params: dict of str to NDArray of net's auxiliary states
     """
     
-    sym, arg_params, aux_params = mx.model.load_checkpoint(model_dir + prefix, epoch)
+    sym, arg_params, aux_params = mx.model.load_checkpoint(model_dir + model_name, epoch)
     logging.info('The pretrained model has been loaded successfully!')
     if ctx:
         specContext(arg_params, ctx)
