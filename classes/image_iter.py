@@ -10,7 +10,7 @@ class ImageIter(mx.io.DataIter):
     it reads raw image files
         - 
     """
-    # kwargs input: data_shape, resize=0, rand_crop=False, rand_resize=False, rand_mirror=False, mean=None, 
+    # kwargs input: resize=0, rand_crop=False, rand_resize=False, rand_mirror=False, mean=None, 
     # std=None, brightness=0, contrast=0, saturation=0, pca_noise=0, inter_method=2
     def __init__(self, batch_size, data_shape, path_imglist, ctx = None, shuffle=False, work_load_list = None, **kwargs):
         super(ImageIter, self).__init__()
@@ -106,7 +106,7 @@ class ImageIter(mx.io.DataIter):
 
     def preprocess_image(self, image):
         """Transforms input data with specified augmentation."""
-        for aug in self.auglist:
+        for aug in self.preprocess:
             image = [ret for src in image for ret in aug(src)]
         return image
 
