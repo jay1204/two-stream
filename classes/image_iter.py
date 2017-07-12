@@ -113,7 +113,7 @@ class ImageIter(mx.io.DataIter):
         for process in self.preprocess:
             if process == 'rand_crop':
                 c, h, w = self.data_shape
-                image = random_crop(image, (h, w))
+                image, _ = random_crop(image, (h, w))
         return image
 
     def next_image(self, img_path):
