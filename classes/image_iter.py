@@ -1,6 +1,8 @@
 import numpy as np 
 import mxnet as mx 
 from mxnet.executor_manager import _split_input_slice
+import mxnet.ndarray as nd
+from mxnet.image import *
 
 class ImageIter(mx.io.DataIter):
     """
@@ -8,6 +10,8 @@ class ImageIter(mx.io.DataIter):
     it reads raw image files
         - 
     """
+    # kwargs input: data_shape, resize=0, rand_crop=False, rand_resize=False, rand_mirror=False, mean=None, 
+    # std=None, brightness=0, contrast=0, saturation=0, pca_noise=0, inter_method=2
     def __init__(self, batch_size, data_shape, path_imglist, ctx = None, shuffle=False, work_load_list = None, **kwargs):
         super(ImageIter, self).__init__()
 
@@ -21,7 +25,7 @@ class ImageIter(mx.io.DataIter):
                 key = int(line[0])
                 imglist[key] = (label, line[-1])
 
-        self.preprocess = kwargs
+        self.preprocess = CreateAugmenter(data_shape, **kwargs)
 
         self.imglist = imglist 
         self.shuffle = shuffle
@@ -39,7 +43,6 @@ class ImageIter(mx.io.DataIter):
 
         self.cur = 0
         self.reset()
-        #self.next()
 
     def reset(self):
         self.cur = 0
@@ -52,9 +55,9 @@ class ImageIter(mx.io.DataIter):
 
     def next(self):
         if self.iter_next():
-            self.get_batch()
+            batch_data, batch_label = self.get_batch()
             self.cur += self.batch_size
-            return 
+            return mx.io.DataBatch([batch_data], [batch_label])
 
     def get_batch(self):
         batch_start = self.cur
@@ -65,33 +68,66 @@ class ImageIter(mx.io.DataIter):
         if work_load_list is None:
             work_load_list = [1] * len(self.ctx)
 
-        slices = _split_input_slice(self.batch_size, work_load_list)
+        #slices = _split_input_slice(self.batch_size, work_load_list)
 
-        for each_slice in slices:
-            imgs_list = map(lambda x: self.imglist[batch_indices[x]], range(each_slice.start, each_slice.stop))
-            data, label = self.read_imgs(imgs = imgs_list, data_shape = self.data_shape, preprocess = self.preprocess)
+        #data_list = []
+        #label_list = []
+        #for each_slice in slices:
+        #    imgs_list = map(lambda x: self.imglist[batch_indices[x]], range(each_slice.start, each_slice.stop))
+        #    data, label = self.read_imgs(imgs = imgs_list)
+        #    data_list.append(data)
+        #    label_list.append(label)
+        imgs_list = map(lambda x: self.imglist[x], batch_indices)
+        batch_data, batch_label = self.read_imgs(imgs_list)
+        return batch_data, batch_label
 
-    def read_imgs(self, imgs, data_shape, preprocess):
+
+    def read_imgs(self, imgs_list):
         """
         Given a list of img_path, read those images and preprocess them to fit into the required data_shape 
         Inputs:
             - imgs: a list of tuple(img_path, label)
             - preprocess: a dict indicating how to preprocess image
         """
+        batch_data = nd.empty((self.batch_size, c, h, w))
+        batch_label = nd.empty(self.batch_size)
         self.images = []
         self.img_paths = []
-        for img in imgs:
-            img_path, label = img
-            image = self.load_one_image(img_path)
-            self.images.append(image)
-            self.img_paths.append(img_path)
+        for i, img in enumerate(imgs_list):
+            label, img_path = img
 
+            if image.shape != self.data_shape:
+                raise AssertionError('The size of the image is not matched with the required data_shape!')
+            batch_data[i][:] = image
+            batch_label[i][:] = label
+
+        return batch_data, batch_label
+
+    def preprocess_image(self, image):
+        """Transforms input data with specified augmentation."""
+        for aug in self.auglist:
+            image = [ret for src in image for ret in aug(src)]
+        return image
+
+    def next_sample(self, img_path):
+        image = self.load_one_image(img_path)
+        image = self.preprocess_image(image)
+        image = self.postprocess_image(image)
+
+        return image
 
     def load_one_image(self, img_path):
         with open(img_path, 'rb') as fp:
             imageInfo = fp.read()
 
         return mx.img.imdecode(imageInfo)
+
+    def postprocess_image(self, image):
+        """
+        Transform the image to make it shape as (channel, height, width)
+        """
+        return nd.transpose(image, axes=(2, 0, 1))
+
 
 
 
