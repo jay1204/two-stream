@@ -1,6 +1,7 @@
 import numpy as np 
 import urllib
 import os
+import mxnet as mx
 
 def getModel(prefix, code, model_dir):
     download(prefix + '-symbol.json', model_dir)
