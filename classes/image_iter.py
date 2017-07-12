@@ -89,13 +89,14 @@ class ImageIter(mx.io.DataIter):
             - imgs: a list of tuple(img_path, label)
             - preprocess: a dict indicating how to preprocess image
         """
+        c, h, w = self.data_shape
         batch_data = nd.empty((self.batch_size, c, h, w))
         batch_label = nd.empty(self.batch_size)
         self.images = []
         self.img_paths = []
         for i, img in enumerate(imgs_list):
             label, img_path = img
-
+            image = self.next_image(img_path)
             if image.shape != self.data_shape:
                 raise AssertionError('The size of the image is not matched with the required data_shape!')
             batch_data[i][:] = image
@@ -109,7 +110,7 @@ class ImageIter(mx.io.DataIter):
             image = [ret for src in image for ret in aug(src)]
         return image
 
-    def next_sample(self, img_path):
+    def next_image(self, img_path):
         image = self.load_one_image(img_path)
         image = self.preprocess_image(image)
         image = self.postprocess_image(image)
