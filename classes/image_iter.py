@@ -25,7 +25,11 @@ class ImageIter(mx.io.DataIter):
                 key = int(line[0])
                 imglist[key] = (label, line[-1])
 
-        self.preprocess = CreateAugmenter(data_shape, **kwargs)
+        self.preprocess = []
+        for key in kwargs.keys():
+            if kwargs[key]:
+                self.preprocess.append(key)
+        #CreateAugmenter(data_shape, **kwargs)
 
         self.imglist = imglist 
         self.shuffle = shuffle
@@ -106,8 +110,10 @@ class ImageIter(mx.io.DataIter):
 
     def preprocess_image(self, image):
         """Transforms input data with specified augmentation."""
-        for aug in self.preprocess:
-            image = [ret for src in image for ret in aug(src)]
+        for process in self.preprocess:
+            if process == 'rand_crop':
+                c, h, w = self.data_shape
+                image = random_crop(image, (h, w))
         return image
 
     def next_image(self, img_path):
