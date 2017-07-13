@@ -6,16 +6,16 @@ import csv
 from ..logger import logger
 from ..config import default
 
-def getUCFImageLst():
+def getUCFImageLst(regenerate = False):
     """
     Given the training list and testing list file, make .lsts file for them
     """
-    if not os.path.exists(default.train_lst) or os.path.exists(default.valid_lst):
+    if not os.path.exists(default.train_lst) or os.path.exists(default.valid_lst) or regenerate:
         makeImageLst(inputFilePath = default.train_list, dataDir = default.data_dir, 
              labelFile = default.label_list, fileType = 'train')
         logger.info('create train.lst and valid.lst')
-    if not os.path.exists(default.test_lst):
-        makeImageLst(inputFilePath = default.train_list, dataDir = default.data_dir, 
+    if not os.path.exists(default.test_lst) or regenerate:
+        makeImageLst(inputFilePath = default.test_list, dataDir = default.data_dir, 
              labelFile = default.label_list, fileType = 'train')
         logger.info('create test.lst')
 
@@ -55,8 +55,9 @@ def writeToFile(fileName, indices, dataFileList, labels):
     counter = 0
     for i in indices:
         for img in os.listdir(dataFileList[i]):
-            image_list.append((counter, labels[i], dataFileList[i] + '/' + img))
-            counter += 1
+            if img.endswith('jpg'):
+                image_list.append((counter, labels[i], dataFileList[i] + '/' + img))
+                counter += 1
     
     for il in image_list:
         fileHandler.writerow(il)
