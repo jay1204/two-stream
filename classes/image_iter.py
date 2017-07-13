@@ -75,9 +75,9 @@ class ImageIter(mx.io.DataIter):
         batch_end = min(self.cur + self.batch_size, self.img_size)
         batch_indices = self.seq[batch_start:batch_end]
 
-        work_load_list = self.work_load_list
-        if work_load_list is None:
-            work_load_list = [1] * len(self.ctx)
+        #work_load_list = self.work_load_list
+        #if work_load_list is None:
+        #    work_load_list = [1] * len(self.ctx)
 
         #slices = _split_input_slice(self.batch_size, work_load_list)
 
