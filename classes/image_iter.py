@@ -12,7 +12,8 @@ class ImageIter(mx.io.DataIter):
     """
     # kwargs input: resize=0, rand_crop=False, rand_resize=False, rand_mirror=False, mean=None, 
     # std=None, brightness=0, contrast=0, saturation=0, pca_noise=0, inter_method=2
-    def __init__(self, batch_size, data_shape, path_imglist, ctx = None, shuffle=False, work_load_list = None, **kwargs):
+    def __init__(self, batch_size, data_shape, path_imglist, ctx = None, shuffle=False, data_name = 'data', 
+        label_name = 'label', work_load_list = None, **kwargs):
         super(ImageIter, self).__init__()
 
         self.batch_size = batch_size
@@ -41,12 +42,18 @@ class ImageIter(mx.io.DataIter):
         if self.ctx is None:
             self.ctx = [mx.cpu()]
 
-        self.data_name = 'data'
-        self.label_name = 'label'
+        self.data_name = data_name
+        self.label_name = label_name
         self.work_load_list = work_load_list
+
+        self.provide_data = [(data_name, (batch_size, ) + data_shape)]
+        self.provide_label = [(label_name, (batch_size, ))]
 
         self.cur = 0
         self.reset()
+
+
+
 
     def reset(self):
         self.cur = 0
