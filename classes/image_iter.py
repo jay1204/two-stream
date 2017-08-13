@@ -34,7 +34,7 @@ class ImageIter(mx.io.DataIter):
         self.img_list = img_list
         self.shuffle = shuffle
         self.img_size = len(img_list.keys())
-        self.seq = np.arange(self.img_size, dtype = np.int)
+        self.seq = np.arange(self.img_size, dtype=np.int)
 
         self.data_shape = data_shape
         self.ctx = ctx
@@ -137,10 +137,4 @@ class ImageIter(mx.io.DataIter):
         Transform the image to make it shape as (channel, height, width)
         """
         return nd.transpose(image, axes=(2, 0, 1))
-
-
-
-
-
-
 
