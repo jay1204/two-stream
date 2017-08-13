@@ -4,9 +4,10 @@ import os
 import mxnet as mx
 import logging
 
-def getModel(prefix, code, model_dir):
+def get_model(prefix, code, model_dir):
     download(prefix + '-symbol.json', model_dir)
     download(prefix + '-%04d.params' % code, model_dir)
+
 
 # obtain the pre-trained model
 def download(url, model_dir):
@@ -14,7 +15,8 @@ def download(url, model_dir):
     if not os.path.exists(model_dir + filename):
         urllib.urlretrieve(url, model_dir + filename)
 
-def specContext(param, ctx):
+
+def spec_context(param, ctx):
     """
     This func specifies the device context(computation source:CPU/GPU)
     of the NDArray
@@ -30,8 +32,9 @@ def specContext(param, ctx):
         param[k] = v.as_in_context(ctx)
         
     return
-    
-def loadPretrainedModel(model_name, epoch, model_dir, ctx = None):
+
+
+def load_pretrained_model(model_name, epoch, model_dir, ctx = None):
     """
     This func is a wrapper of the mx.model.load_checkpoint. It can 
     also specify the context(computation source:CPU/GPU) that will
@@ -50,11 +53,12 @@ def loadPretrainedModel(model_name, epoch, model_dir, ctx = None):
     sym, arg_params, aux_params = mx.model.load_checkpoint(model_dir + model_name, epoch)
     logging.info('The pretrained model has been loaded successfully!')
     if ctx:
-        specContext(arg_params, ctx)
-        specContext(aux_params, ctx)
+        spec_context(arg_params, ctx)
+        spec_context(aux_params, ctx)
     return sym, arg_params, aux_params
 
-def refactorModel(symbol, arg_params, num_classes, layer_name='flatten0'):
+
+def refactor_model(symbol, arg_params, num_classes, layer_name='flatten0'):
     """
     This func is to replace the last fully-connected layer of the pre-trained model
     with our defined last fully-connected layer
@@ -70,4 +74,4 @@ def refactorModel(symbol, arg_params, num_classes, layer_name='flatten0'):
     net = mx.symbol.FullyConnected(data=net, num_hidden=num_classes, name='fc1')
     net = mx.symbol.SoftmaxOutput(data=net, name='softmax')
     new_args = dict({k:arg_params[k] for k in arg_params if 'fc1' not in k})
-    return (net, new_args)
+    return net, new_args

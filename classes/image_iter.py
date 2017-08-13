@@ -4,37 +4,36 @@ from mxnet.executor_manager import _split_input_slice
 import mxnet.ndarray as nd
 from mxnet.image import *
 
+
 class ImageIter(mx.io.DataIter):
     """
     This class is a wrapper of the basic mx.io.DataIter. 
     it reads raw image files
-        - 
+
     """
-    # kwargs input: resize=0, rand_crop=False, rand_resize=False, rand_mirror=False, mean=None, 
-    # std=None, brightness=0, contrast=0, saturation=0, pca_noise=0, inter_method=2
-    def __init__(self, batch_size, data_shape, path_imglist, ctx = None, shuffle=False, data_name = 'data', 
-        label_name = 'label', work_load_list = None, **kwargs):
+    def __init__(self, batch_size, data_shape, path_img_list, ctx=None, shuffle=False, data_name='data',
+                 label_name='label', work_load_list=None, **kwargs):
         super(ImageIter, self).__init__()
 
         self.batch_size = batch_size
 
-        with open(path_imglist) as fin:
-            imglist = {}
+        with open(path_img_list) as fin:
+            img_list = {}
             for line in iter(fin.readline, ''):
                 line = line.strip().split('\t')
                 label = np.array([float(i) for i in line[1:-1]])
                 key = int(line[0])
-                imglist[key] = (label, line[-1])
+                img_list[key] = (label, line[-1])
 
-        self.preprocess = []
+        self.pre_process = []
         for key in kwargs.keys():
             if kwargs[key]:
-                self.preprocess.append(key)
+                self.pre_process.append(key)
         #CreateAugmenter(data_shape, **kwargs)
 
-        self.imglist = imglist 
+        self.img_list = img_list
         self.shuffle = shuffle
-        self.img_size = len(imglist.keys())
+        self.img_size = len(img_list.keys())
         self.seq = np.arange(self.img_size, dtype = np.int)
 
         self.data_shape = data_shape
@@ -52,14 +51,10 @@ class ImageIter(mx.io.DataIter):
         self.cur = 0
         self.reset()
 
-
-
-
     def reset(self):
         self.cur = 0
         if self.shuffle:
             np.random.shuffle(self.seq)
-
 
     def iter_next(self):
         return self.cur + self.batch_size <= self.img_size
@@ -88,10 +83,9 @@ class ImageIter(mx.io.DataIter):
         #    data, label = self.read_imgs(imgs = imgs_list)
         #    data_list.append(data)
         #    label_list.append(label)
-        imgs_list = map(lambda x: self.imglist[x], batch_indices)
+        imgs_list = map(lambda x: self.img_list[x], batch_indices)
         batch_data, batch_label = self.read_imgs(imgs_list)
         return batch_data, batch_label
-
 
     def read_imgs(self, imgs_list):
         """
@@ -115,9 +109,9 @@ class ImageIter(mx.io.DataIter):
 
         return batch_data, batch_label
 
-    def preprocess_image(self, image):
+    def pre_process_image(self, image):
         """Transforms input data with specified augmentation."""
-        for process in self.preprocess:
+        for process in self.pre_process:
             if process == 'rand_crop':
                 c, h, w = self.data_shape
                 image, _ = random_crop(image, (h, w))
@@ -125,18 +119,20 @@ class ImageIter(mx.io.DataIter):
 
     def next_image(self, img_path):
         image = self.load_one_image(img_path)
-        image = self.preprocess_image(image)
-        image = self.postprocess_image(image)
+        image = self.pre_process_image(image)
+        image = self.post_process_image(image)
 
         return image
 
-    def load_one_image(self, img_path):
+    @staticmethod
+    def load_one_image(img_path):
         with open(img_path, 'rb') as fp:
-            imageInfo = fp.read()
+            image_info = fp.read()
 
-        return mx.img.imdecode(imageInfo)
+        return mx.img.imdecode(image_info)
 
-    def postprocess_image(self, image):
+    @staticmethod
+    def post_process_image(image):
         """
         Transform the image to make it shape as (channel, height, width)
         """
