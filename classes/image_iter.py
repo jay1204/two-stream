@@ -11,13 +11,13 @@ class ImageIter(mx.io.DataIter):
     it reads raw image files
 
     """
-    def __init__(self, batch_size, data_shape, path_img_list, ctx=None, shuffle=False, data_name='data',
+    def __init__(self, batch_size, data_shape, path_img_lst, ctx=None, shuffle=False, data_name='data',
                  label_name='label', work_load_list=None, **kwargs):
         super(ImageIter, self).__init__()
 
         self.batch_size = batch_size
 
-        with open(path_img_list) as fin:
+        with open(path_img_lst) as fin:
             img_list = {}
             for line in iter(fin.readline, ''):
                 line = line.strip().split('\t')
