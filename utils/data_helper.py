@@ -30,7 +30,7 @@ def get_ucf_image_lst(regenerate=False, train_ratio=1.0, one_video_per_class_val
     return
 
 
-def make_image_lst(input_file_path, data_dir, label_file, train_ratio, file_type, one_video_per_class_valid):
+def make_image_lst(input_file_path, data_dir, label_file, train_ratio, file_type, one_video_per_class_valid=False):
     data_file_list, input_file_label_names = read_input_file(input_file_path, data_dir)
     label_dict = read_label_file(label_file)
     
