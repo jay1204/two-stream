@@ -36,7 +36,7 @@ def make_image_lst(input_file_path, data_dir, label_file, train_ratio, file_type
     
     # given labelNames and label_dict, retrieve labels for each item data_file_list
     labels = map(lambda x: label_dict[x], input_file_label_names)
-    write_to_file_wrapper(input_file_path, data_file_list, labels, train_ratio, file_type)
+    write_to_file_wrapper(input_file_path, data_file_list, labels, train_ratio, file_type, one_video_per_class_valid)
     return
 
 
