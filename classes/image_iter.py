@@ -36,6 +36,9 @@ class ImageIter(mx.io.DataIter):
         self.img_size = len(img_list.keys())
         self.seq = np.arange(self.img_size, dtype=np.int)
 
+        if not isinstance(data_shape, tuple):
+            data_shape = tuple(data_shape)
+
         self.data_shape = data_shape
         self.ctx = ctx
         if self.ctx is None:
