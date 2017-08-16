@@ -6,7 +6,7 @@ config = ed()
 config.num_classes = 101
 
 config.train_img = ed()
-config.train_img.batch_size = 80
+config.train_img.batch_size = 70
 config.train_img.epoch = 1
 config.train_img.drop_out = 1.0
 
