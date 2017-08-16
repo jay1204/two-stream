@@ -4,20 +4,20 @@ import random
 import numpy as np
 import csv
 from ..logger import logger
-from ..config import default
+from ..config import ucf_img
 
 
 def get_UCF_image_lst(regenerate=False, train_ratio=1.0):
     """
     Given the training list and testing list file, make .lsts file for them
     """
-    if not os.path.exists(default.train_lst) or os.path.exists(default.valid_lst) or regenerate:
-        make_image_lst(input_file_path=default.train_list, data_dir=default.data_dir,
-                       label_file=default.label_list, train_ratio=train_ratio, file_type='train', )
+    if not os.path.exists(ucf_img.train_lst) or os.path.exists(ucf_img.valid_lst) or regenerate:
+        make_image_lst(input_file_path=ucf_img.train_list, data_dir=ucf_img.data_dir,
+                       label_file=ucf_img.label_list, train_ratio=train_ratio, file_type='train', )
         logger.info('create train.lst and valid.lst')
-    if not os.path.exists(default.test_lst) or regenerate:
-        make_image_lst(input_file_path=default.test_list, data_dir= default.data_dir,
-                       label_file=default.label_list, train_ratio=train_ratio, file_type='test')
+    if not os.path.exists(ucf_img.test_lst) or regenerate:
+        make_image_lst(input_file_path=ucf_img.test_list, data_dir= ucf_img.data_dir,
+                       label_file=ucf_img.label_list, train_ratio=train_ratio, file_type='test')
         logger.info('create test.lst')
 
     return

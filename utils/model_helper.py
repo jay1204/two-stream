@@ -35,7 +35,7 @@ def spec_context(param, ctx):
     return
 
 
-def load_pretrained_model(model_name, epoch, model_dir, ctx = None):
+def load_pretrained_model(model_name, epoch, model_dir, ctx=None):
     """
     This func is a wrapper of the mx.model.load_checkpoint. It can 
     also specify the context(computation source:CPU/GPU) that will
@@ -75,4 +75,5 @@ def refactor_model(symbol, arg_params, num_classes, layer_name='flatten0'):
     net = mx.symbol.FullyConnected(data=net, num_hidden=num_classes, name='fc1')
     net = mx.symbol.SoftmaxOutput(data=net, name='softmax')
     new_args = dict({k:arg_params[k] for k in arg_params if 'fc1' not in k})
+
     return net, new_args
