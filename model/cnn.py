@@ -68,6 +68,7 @@ class CNN(object):
             valid_iter.reset()
             metric.reset()
             for batch in train_iter:
+                logger.info("The batch {}".format(batch))
                 mod.forward(batch, is_train=True)
                 mod.update_metric(metric, batch.label)
                 mod.backward()
