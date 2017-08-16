@@ -76,10 +76,12 @@ class CNN(object):
                 count += 1
                 train_acc.append(metric.get())
                 if count % 100 == 0:
-                    logger.info("The train accuracy of the %d-th iteration is %f"%(count, train_acc[-1][1]))
+                    # logger.info("The train accuracy of the %d-th iteration is %f"%(count, train_acc[-1][1]))
+                    print "The train accuracy of the %d-th iteration is %f"%(count, train_acc[-1][1])
                     score = mod.score(valid_iter.next(), ['acc'])
                     valid_acc.append(score)
-                    logger.info("The valid accuracy of the %-th iteration is %f"%(count, valid_acc[-1][1]))
+                    print "The valid accuracy of the %-th iteration is %f"%(count, valid_acc[-1][1])
+                    # logger.info("The valid accuracy of the %-th iteration is %f"%(count, valid_acc[-1][1]))
                     if valid_acc[-1] > valid_accuracy:
                         valid_accuracy = valid_acc[-1]
                         mod.save(self.prefix, count)
