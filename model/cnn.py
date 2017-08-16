@@ -44,7 +44,7 @@ class CNN(object):
         train_iter = ImageIter(batch_size=self.train.batch_size, data_shape=self.pretrained_model.data_shape,
                                path_img_lst=self.dataset.train_lst, ctx=self.ctx, shuffle=shuffle,
                                label_name=label_name, work_load_list=None, rand_crop=rand_crop)
-        valid_iter = ImageIter(batch_size=self.train.batch_size * 10, data_shape=self.pretrained_model.data_shape,
+        valid_iter = ImageIter(batch_size=self.train.batch_size, data_shape=self.pretrained_model.data_shape,
                                path_img_lst=self.dataset.valid_lst, ctx=self.ctx, shuffle=shuffle,
                                label_name=label_name, work_load_list=None, rand_crop=rand_crop)
 
@@ -65,7 +65,6 @@ class CNN(object):
         valid_accuracy = 0.0
         for epoch in range(self.train.epoch):
             train_iter.reset()
-            valid_iter.reset()
             metric.reset()
             for batch in train_iter:
                 logger.info("The batch {}".format(batch))
