@@ -77,19 +77,18 @@ def train_valid_split(data_file_list, labels, train_ratio, one_video_per_class_v
     """
     num = len(data_file_list)
     if one_video_per_class_valid:
-        _, train_indices = np.unique(labels, return_index=True)
+        _, valid_indices = np.unique(labels, return_index=True)
     else:
-        train_size = int(num * train_ratio)
-        train_indices = sorted(np.random.choice(num, size = train_size, replace = False).tolist())
-    valid_indices = []
-    train_index = 0
+        valid_size = int(num * (1 - train_ratio))
+        valid_indices = sorted(np.random.choice(num, size = valid_size, replace = False).tolist())
+    train_indices = []
+    valid_index = 0
     for i in xrange(num):
-        if train_index >= len(train_indices) or i != train_indices[train_index]:
-            valid_indices.append(i)
+        if valid_index >= len(valid_indices) or i != valid_indices[valid_index]:
+            train_indices.append(i)
         else:
-            train_index += 1
+            valid_index += 1
     return train_indices, valid_indices
-
 
 def extract_dir(input_file_path):
     """
