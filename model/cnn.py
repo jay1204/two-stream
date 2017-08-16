@@ -84,6 +84,7 @@ class CNN(object):
                         valid_accuracy = valid_acc[-1]
                         mod.save(self.prefix, count)
 
+                print train_acc
                 if len(train_acc) >= 2 and train_acc[-1] - train_acc[-2] <= 0.0001:
                     break
 
