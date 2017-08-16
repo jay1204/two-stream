@@ -1,5 +1,5 @@
 import mxnet as mx
-from ..utils import get_UCF_image_lst, get_model, load_pretrained_model,refactor_model
+from ..utils import get_ucf_image_lst, get_model, load_pretrained_model,refactor_model
 from ..config import nn, ucf_img, config
 from ..logger import logger
 from ..classes import ImageIter
@@ -78,7 +78,7 @@ class CNN(object):
                 if count % 100 == 0:
                     # logger.info("The train accuracy of the %d-th iteration is %f"%(count, train_acc[-1][1]))
                     print "The train accuracy of the %d-th iteration is %f"%(count, train_acc[-1])
-                    score = mod.score(valid_iter.next(), ['acc'])
+                    score = mod.score(valid_iter, ['acc'])
                     valid_acc.append(score[1])
                     print "The valid accuracy of the %-th iteration is %f"%(count, valid_acc[-1])
                     # logger.info("The valid accuracy of the %-th iteration is %f"%(count, valid_acc[-1][1]))
@@ -86,7 +86,7 @@ class CNN(object):
                         valid_accuracy = valid_acc[-1]
                         mod.save(self.prefix, count)
 
-                if count >= 100 and train_acc[-1][1] - train_acc[-2][1] <= 0.0001:
+                if count >= 100 and train_acc[-1] - train_acc[-2] <= 0.0001:
                     break
 
         return train_acc, valid_acc
