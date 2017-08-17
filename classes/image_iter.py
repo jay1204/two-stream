@@ -111,8 +111,6 @@ class ImageIter(mx.io.DataIter):
         c, h, w = self.data_shape
         batch_data = nd.empty((self.batch_size, c, h, w))
         batch_label = nd.empty(self.batch_size)
-        self.images = []
-        self.img_paths = []
         for i, img in enumerate(imgs_list):
             label, img_path = img
             image = self.next_image(img_path)
