@@ -66,7 +66,7 @@ class ImageIter(mx.io.DataIter):
         if self.iter_next():
             batch_data, batch_label = self.get_batch()
             self.cur += self.batch_size
-            return mx.io.DataBatch(data=batch_data, label=batch_label, pad=self.getpad(), index=self.getindex())
+            return mx.io.DataBatch(data=[batch_data], label=[batch_label], pad=self.getpad(), index=self.getindex())
         else:
             raise StopIteration
 
