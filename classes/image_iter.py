@@ -60,13 +60,16 @@ class ImageIter(mx.io.DataIter):
             np.random.shuffle(self.seq)
 
     def iter_next(self):
-        return self.cur + self.batch_size < self.img_size
+        return self.cur + self.batch_size <= self.img_size
 
     def next(self):
         if self.iter_next():
             batch_data, batch_label = self.get_batch()
             self.cur += self.batch_size
-            return mx.io.DataBatch([batch_data], [batch_label])
+            return mx.io.DataBatch(data=batch_data, label=batch_label, pad=self.getpad(), index=self.getindex(),
+                                   provide_data=self.provide_data, provide_label=self.provide_label)
+        else:
+            raise StopIteration
 
     def get_batch(self):
         batch_start = self.cur
@@ -89,6 +92,15 @@ class ImageIter(mx.io.DataIter):
         imgs_list = map(lambda x: self.img_list[x], batch_indices)
         batch_data, batch_label = self.read_imgs(imgs_list)
         return batch_data, batch_label
+
+    def getpad(self):
+        if self.cur + self.batch_size > self.img_size:
+            return self.cur + self.batch_size - self.img_size
+        else:
+            return 0
+
+    def getindex(self):
+        return self.cur/self.batch_size
 
     def read_imgs(self, imgs_list):
         """
