@@ -83,7 +83,7 @@ class CNN(object):
                     # logger.info("The valid accuracy of the %-th iteration is %f"%(count, valid_acc[-1][1]))
                     if valid_acc[-1] > valid_accuracy:
                         valid_accuracy = valid_acc[-1]
-                        mod.save(self.prefix, count)
+                        mod.save_checkpoint(self.prefix, epoch)
 
                 if count >= 100 and train_acc[-1] - train_acc[-2] <= 0.0001:
                     break
