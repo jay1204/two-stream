@@ -85,7 +85,4 @@ class CNN(object):
                         valid_accuracy = valid_acc[-1]
                         mod.save_checkpoint(self.prefix, epoch)
 
-                if count >= 100 and train_acc[-1] - train_acc[-2] <= 0.0001:
-                    break
-
         return train_acc, valid_acc
