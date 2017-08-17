@@ -79,7 +79,7 @@ class CNN(object):
                     print "The train accuracy of the %d-th iteration is %f"%(count, train_acc[-1])
                     score = mod.score(valid_iter, ['acc'])
                     valid_acc.append(score[0][1])
-                    print "The valid accuracy of the %-th iteration is %f"%(count, valid_acc[-1])
+                    print "The valid accuracy of the %d-th iteration is %f"%(count, valid_acc[-1])
                     # logger.info("The valid accuracy of the %-th iteration is %f"%(count, valid_acc[-1][1]))
                     if valid_acc[-1] > valid_accuracy:
                         valid_accuracy = valid_acc[-1]
